@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KopiLens: Deteksi Biji Kopi Arabica, Robusta, Liberica</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="spot"></div>
+<div class="aurora" aria-hidden="true"><i></i><i></i><i></i></div>
+<header class="nav" id="nav">
+  <a class="brand" href="#beranda"><i class="logo"></i><span>KopiLens</span></a>
+  <nav id="menu" aria-label="Menu utama">
+    <a href="#beranda" class="on">Beranda</a>
+    <a href="#deteksi">Deteksi</a>
+    <a href="#jenis">Jenis kopi</a>
+    <a href="#tentang">Tentang</a>
+    <span class="glow" id="glow"></span>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="beranda">
+  <div class="beans" aria-hidden="true">
+    <i class="bean" style="--s:70px;--d:7s;--rot:-25deg;left:8%;top:22%"></i>
+    <i class="bean" style="--s:44px;--d:5.5s;--rot:30deg;left:20%;top:68%"></i>
+    <i class="bean" style="--s:96px;--d:8s;--rot:12deg;left:78%;top:18%"></i>
+    <i class="bean" style="--s:52px;--d:6s;--rot:-40deg;left:88%;top:62%"></i>
+    <i class="bean" style="--s:36px;--d:4.8s;--rot:55deg;left:64%;top:78%"></i>
+    <i class="bean" style="--s:60px;--d:6.8s;--rot:-8deg;left:36%;top:14%"></i>
+  </div>
+  <div class="orbit" aria-hidden="true">
+    <div class="ring" style="--in:0%;--t:40s;--c:var(--arabica)"><u></u></div>
+    <div class="ring" style="--in:14%;--t:29s;--c:var(--robusta);animation-direction:reverse"><u></u></div>
+    <div class="ring" style="--in:28%;--t:21s;--c:var(--liberica)"><u></u></div>
+  </div>
+  <div class="hero-in">
+    <h1>Kenali jenis biji kopimu dalam hitungan detik</h1>
+    <p>Unggah satu foto biji kopi, dan KopiLens menebak apakah itu Arabica, Robusta, atau Liberica.</p>
+    <div class="row c">
+      <a class="btn" href="#deteksi">Mulai deteksi</a>
+      <a class="btn ghost" href="#jenis">Pelajari ciri-cirinya</a>
+    </div>
+  </div>
+  <a class="scrollhint" href="#deteksi" aria-label="Gulir ke bawah"><i></i></a>
+</section>
+
+<section class="sec" id="deteksi">
+  <h2 class="reveal">Deteksi jenis kopi</h2>
+  <p class="sub reveal">Tiga langkah singkat: unggah foto, pindai, lalu lihat hasilnya.</p>
+
+  <div class="steps reveal">
+    <div class="step act"><i>1</i><span>Unggah foto</span></div>
+    <div class="step"><i>2</i><span>Pindai</span></div>
+    <div class="step"><i>3</i><span>Lihat hasil</span></div>
+  </div>
+
+  <div class="console card reveal">
+    <div class="console-bar">
+      <div class="dots" aria-hidden="true"><i></i><i></i><i></i></div>
+      <b>Pemindai biji kopi</b>
+      <div class="status" id="status" data-s="1"><em></em><span>Menunggu foto</span></div>
+    </div>
+    <div class="console-body">
+      <div class="left">
+        <div class="stage" id="stage" tabindex="0" role="button" aria-label="Pilih atau seret foto biji kopi">
+          <div class="hint" id="hint">
+            <div class="upicon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg></div>
+            <strong>Seret foto ke sini</strong>atau klik untuk memilih file
+            <div class="fmt"><span>JPG</span><span>PNG</span></div>
+          </div>
+          <canvas id="cv"></canvas>
+          <div class="scan"></div>
+        </div>
+        <p class="info" id="info" hidden></p>
+        <input type="file" id="file" accept="image/*" hidden>
+        <div class="row">
+          <button class="btn" id="go" disabled>Deteksi jenis kopi</button>
+          <button class="btn ghost" id="reset" disabled>Ganti foto</button>
+        </div>
+        <div class="msg" id="msg" role="alert"></div>
+      </div>
+      <div class="right" aria-live="polite">
+        <h3>Hasil pemindaian</h3>
+        <div id="result"><div class="idle"><i class="orb"></i><strong>Belum ada hasil</strong><small>Pilih foto, lalu tekan Deteksi jenis kopi.</small></div></div>
+        <details id="settings">
+          <summary>Pengaturan model</summary>
+          <label for="key">API key Roboflow</label>
+          <input type="password" id="key" placeholder="Tempel API key di sini" autocomplete="off">
+          <label for="model">Model (nama-proyek/versi)</label>
+          <input type="text" id="model" value="coffee-bean-tm9bq/1">
+          <p class="note">Key hanya tersimpan di browser kamu. Jangan bagikan file ini setelah mengisi key.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="jenis">
+  <h2 class="reveal">Tiga jenis kopi, tiga karakter</h2>
+  <p class="sub reveal">Beberapa ciri umum yang membantu membedakannya dengan mata.</p>
+  <div class="types">
+    <article class="type reveal" style="--c:var(--arabica)">
+      <h3>Arabica</h3>
+      <p>Rasa halus dengan keasaman lembut dan aroma manis.</p>
+      <ul><li>Bentuk oval, agak pipih</li><li>Belahan tengah melengkung</li><li>Kafein relatif lebih rendah</li></ul>
+    </article>
+    <article class="type reveal" style="--c:var(--robusta)">
+      <h3>Robusta</h3>
+      <p>Rasa pekat, pahit, dan bertubuh tebal.</p>
+      <ul><li>Bentuk lebih bulat</li><li>Belahan tengah cenderung lurus</li><li>Kafein relatif lebih tinggi</li></ul>
+    </article>
+    <article class="type reveal" style="--c:var(--liberica)">
+      <h3>Liberica</h3>
+      <p>Langka, beraroma bunga dan buah dengan sentuhan smoky.</p>
+      <ul><li>Ukuran paling besar</li><li>Bentuk tidak simetris</li><li>Belahan tengah bergerigi</li></ul>
+    </article>
+  </div>
+</section>
+
+<section class="sec" id="tentang">
+  <h2 class="reveal">Tentang KopiLens</h2>
+  <div class="card reveal about">
+    <p>Foto kamu dikirim ke model klasifikasi di Roboflow, lalu hasilnya ditampilkan sebagai persentase keyakinan untuk tiap jenis.</p>
+    <p>Hasil ini perkiraan. Model paling andal pada foto yang gayanya mirip data latihnya, jadi foto dengan latar, cahaya, atau ukuran yang sangat berbeda bisa memberi jawaban keliru dengan keyakinan tinggi.</p>
+  </div>
+</section>
+</main>
+<footer class="foot">KopiLens. Hasil deteksi bersifat perkiraan dan bergantung pada model yang dipakai.</footer>
+<script src="config.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
